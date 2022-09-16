@@ -15,7 +15,7 @@ def pretty_2dlist(lst):
     """
     Pretty Prints 2D List
     """
-    print(tabulate(lst))
+    print(tabulate(lst, tablefmt="github"))
 
 
 
@@ -23,7 +23,9 @@ def get_clist_data():
     URL = 'https://clist.by/'
     r = requests.get(URL)
     soup = BeautifulSoup(r.text, 'html.parser')
-    data_ace = soup.select('.data-ace')
+    data_ace = soup.select('.coming .data-ace')
+    # data_ace = soup.select('.data-ace') # For all contest
+    # Get data-ace attribute from <a> tag
     data_ace = [ e['data-ace'] for e in data_ace]
     data_ace = [ json.loads(e) for e in data_ace]
     tbl = []
