@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 from dateutil import parser
 from tabulate import tabulate
 import argparse
+import subprocess
 
 def date_util(str):
     dt = parser.parse(str)
@@ -55,6 +56,9 @@ def get_clist_data():
     tbl.insert(0, headers)
     pretty_2dlist(tbl)
 
+def get_weather(city):
+    URL=f"https://wttr.in/{city}"
+    print(requests.get(URL).text)
 
 def parse_args():
     """
@@ -64,6 +68,7 @@ def parse_args():
 
     # Add Arguments to the parser
     parser.add_argument('--clist', action='store_true', help='Get Upcoming Contest from Clist')
+    parser.add_argument('-w', '--weather', action='store', dest='city', help="Get Weather in Terminal")
 
     args = parser.parse_args()
     return args
@@ -74,6 +79,8 @@ def main(args):
     """
     if args.clist:
         get_clist_data()
+    elif args.city:
+        get_weather(args.city)
 
 if __name__ == '__main__':
     args = parse_args()
