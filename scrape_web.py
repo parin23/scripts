@@ -4,6 +4,7 @@ import requests, json
 from bs4 import BeautifulSoup
 from dateutil import parser
 from tabulate import tabulate
+import argparse
 
 def date_util(str):
     dt = parser.parse(str)
@@ -29,7 +30,7 @@ def get_clist_data():
     data_ace = [ e['data-ace'] for e in data_ace]
     data_ace = [ json.loads(e) for e in data_ace]
     tbl = []
-    attrs = ['location', 'time' ]
+    attrs = ['location', 'time', 'desc' ]
     location_filter = ['codechef.com', 'atcoder.jp', 'codeforces.com', 'leetcode.com']
 
     data_ace = list(filter(lambda e : e['location'] in location_filter, data_ace))
@@ -49,17 +50,31 @@ def get_clist_data():
         tbl.append(row)
 
     # Print Table
+    print('Upcoming Contest')
     headers = ['Location', 'Start Time', 'End Time']
     tbl.insert(0, headers)
     pretty_2dlist(tbl)
 
 
+def parse_args():
+    """
+    Parse Arguments using argparse
+    """
+    parser = argparse.ArgumentParser()
 
-def main():
+    # Add Arguments to the parser
+    parser.add_argument('--clist', action='store_true', help='Get Upcoming Contest from Clist')
+
+    args = parser.parse_args()
+    return args
+
+def main(args):
     """
     main function
     """
-    get_clist_data()
+    if args.clist:
+        get_clist_data()
 
 if __name__ == '__main__':
-    main()
+    args = parse_args()
+    main(args)
