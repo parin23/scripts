@@ -1,0 +1,33 @@
+#!/bin/bash
+
+url=$1
+
+test='adsf'
+
+function error(){
+	notify-send "No Valid Link Found"
+	echo "Usage $0 <URL>"
+	exit 1
+}
+
+
+# TODO : Make Player generalized for Torrents
+function torrent-mpv-play () {
+	notify-send "Torrent to MPV" "Trying to Play torrent in MPV"
+	alacritty -e bash -c "node ~/repos/webtorrent-cli/webtorrent-cli-4.1.0/bin/cmd.js \"$url\" --mpv ; url=$url notify-send $url "
+	exit 0
+}
+
+function yt-mpv-play (){
+	notify-send "Playing Youtube Video" "MPV"
+	mpv_options="--ytdl-format=best[height<=720]"
+	mpv $mpv_options $url
+	exit 0
+}
+
+[[ $url == "http"* ]] || url=$(xclip -o)
+[[ $url == "magnet"* ]] && torrent-mpv-play
+[[ $url == *"youtu"* ]] && yt-mpv-play
+
+error
+
