@@ -10,11 +10,12 @@ function error(){
 	exit 1
 }
 
-
-# TODO : Make Player generalized for Torrents
 function torrent-mpv-play () {
 	notify-send "Torrent to MPV" "Trying to Play torrent in MPV"
-	alacritty -e bash -c "node ~/repos/webtorrent-cli/webtorrent-cli-4.1.0/bin/cmd.js \"$url\" --mpv ; url=$url notify-send $url "
+	url=$(echo $url | sed 's/[()&]/\\&/g') # Escape Meta characters () &
+	alacritty -e bash -c "node ~/repos/webtorrent-cli/webtorrent-cli-4.1.0/bin/cmd.js $url --mpv ; url=$url notify-send $url "
+	echo $url
+	notify-send 'Completed'
 	exit 0
 }
 
@@ -25,9 +26,16 @@ function yt-mpv-play (){
 	exit 0
 }
 
+function webm-play(){
+	notify-send "Playing Webm"
+	mpv $url
+	exit 0
+}
+
 [[ $url == "http"* ]] || url=$(xclip -o)
 [[ $url == "magnet"* ]] && torrent-mpv-play
 [[ $url == *"youtu"* ]] && yt-mpv-play
+[[ $url == *".webm" ]] && webm-play
 
 error
 
