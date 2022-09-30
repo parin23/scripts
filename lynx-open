@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# open a URL in Lynx
+# get URL from Clipboard
+# If no URL then Prompt for DDG Search
+
+# Requires: zenity
+
+url=$1
+
+function error(){
+	notify-send "No Valid Link Found"
+	echo "Usage $0 <URL>"
+	exit 1
+}
+
+function open-lynx(){
+
+	notify-send "Opeaning in Lynx" "$url"
+	alacritty -e bash -c "lynx $url && read exiting"
+	echo "Completed"
+	exit 0
+
+
+}
+
+function ddg-search(){
+	term=$(zenity  --entry --text="Enter Search Term")
+	term=$(echo $term | sed 's/ /+/g')
+	echo "https://html.duckduckgo.com/html?q=${term}"
+}
+
+[[ $url == "http"* ]] || url=$(xclip -o)
+[[ $url == "http"* ]] || url=$(ddg-search)
+[[ $url == "http"* ]] && open-lynx
+
+error
+
