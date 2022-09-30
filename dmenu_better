@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# programs_run.list example
+#--START--
+# firefox
+# firefox -P default
+# neomutt # nh interm
+# task # interm
+#--END--
+# '#interm' makes the program run in terminal
+# '#nh' makes the command hold the terminal after exist(useful for viewing command output)
+
+LIST="$HOME/.local/bin/programs_run.list"
+
+DMENU_OPTONS="-i -l 3 -fn mononoki:size=14 "
+ALACRITTY_OPTIONS="-o font.size=10  window.startup_mode=Maximized " # for Applications with interm
+HOLD="read p" # Command when nh is mentoned in comment
+
+cmd=$(cat $LIST | dmenu ${DMENU_OPTONS} -p "Select Program: " )
+
+[[ $cmd == *"interm"* ]] && TERMINAL=1
+[[ $cmd == *" nh "* ]] && HOLD="echo exiting"
+
+# Remove comments from input
+cmd=$(echo $cmd | sed 's/#.*//g')
+
+[[ $TERMINAL -eq 1 ]] && alacritty $ALACRITTY_OPTIONS -e bash -c "EDITOR=nvim $cmd && $HOLD" && exit 0
+echo $cmd
+exec $cmd

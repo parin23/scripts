@@ -27,6 +27,6 @@ Play YT videos in MPV
 
 usage:
 Copy Youtube url and run this script.
-requires `xclip`
+requires `xclip` `yt-dlp`
 
 

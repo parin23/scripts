@@ -34,7 +34,6 @@ function error(){
 function validate_dirs(){
 	isvalid=1
 	for dir in `cat $FOLDER_LIST`; do
-#		echo $dir
 		[[ -e $dir ]] || isvalid=0
 	done
 
@@ -43,18 +42,19 @@ function validate_dirs(){
 
 
 function take_backup(){
-	echo "Backing up files to $BACKUP_DIR"
-	echo "File will be saved as $FILE_NAME"
+	echo "Backing up files to: $BACKUP_DIR"
+	echo "File will be saved as: $FILE_NAME"
 	tar czf ${FILE_NAME}.tar.gz -T $FOLDER_LIST
 	echo "Completed"
 }
 
 function print_folders(){
-	echo "Following Folders will be stored in $FILE_NAME"
+	echo "Following Folders will be stored in: $FILE_NAME"
 	for dir in `cat $FOLDER_LIST`;do
 		echo $dir
 	done
-	echo "list used : $FOLDER_LIST for list"
+	echo "End of Folder List"
+	echo "list used: $FOLDER_LIST for foler/file list"
 }
 
 validate_dirs
